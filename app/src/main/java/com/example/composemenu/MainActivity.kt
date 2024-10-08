@@ -1,0 +1,172 @@
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Dashboard
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+
+// Data class representing food items
+data class FoodItem(val name: String, val price: String, val category: String)
+
+// MenuScreen Composable Function
+@Composable
+fun MenuScreen() {
+    val categories = listOf("Meals", "Sides", "Snacks")
+    var selectedCategory by remember { mutableStateOf(0) }
+    val foodItems = listOf(
+        FoodItem("Spicy Noodles", "Kshs 1,500", "Meals"),
+        FoodItem("Shrimp Pasta", "Kshs 1,800", "Meals"),
+        FoodItem("French Fries", "Kshs 500", "Sides"),
+        FoodItem("Spring Rolls", "Kshs 700", "Snacks")
+    )
+
+
+    Scaffold(
+        topBar = { TopAppBarWithCart() },
+        bottomBar = { BottomNavigationBar() }
+    ) { innerPadding -> // Use innerPadding for the content padding
+        Column(modifier = Modifier.padding(innerPadding)) {
+            // Call CategoryTabs with the correct parameters
+            CategoryTabs(categories, selectedCategory) { index ->
+                selectedCategory = index
+            }
+            // Filter food items based on selected category
+            val filteredItems = foodItems.filter { it.category == categories[selectedCategory] }
+            FoodGrid(filteredItems)
+        }
+    }
+}
+
+// TopAppBar with a cart icon
+@Composable
+fun TopAppBarWithCart() {
+    TopAppBar(
+        title = { Text(text = "Our Menu", fontSize = 20.sp, fontWeight = FontWeight.Bold) },
+        backgroundColor = Color(0xFFFF9800),
+        actions = {
+            IconButton(onClick = { /* Handle cart click */ }) {
+                Icon(Icons.Default.ShoppingCart, contentDescription = "Cart")
+            }
+        }
+    )
+}
+
+
+// Category Tabs for selecting different food categories
+@Composable
+fun CategoryTabs(categories: List<String>) {
+    var selectedCategory by remember { mutableStateOf(0) } // State variable to track the selected tab index
+
+    TabRow(selectedTabIndex = selectedCategory, backgroundColor = Color.Black) {
+        categories.forEachIndexed { index, category ->
+            Tab(
+                selected = selectedCategory == index,
+                onClick = {
+                    selectedCategory = index
+
+                },
+                text = { Text(text = category, fontWeight = FontWeight.Bold) }
+            )
+        }
+    }
+}
+
+// Grid for displaying food items
+@Composable
+fun FoodGrid(foodItems: List<FoodItem>) {
+    LazyColumn(
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(foodItems) { foodItem ->
+            FoodItemCard(foodItem)
+        }
+    }
+}
+
+// FoodItemCard to display food item details
+@Composable
+fun FoodItemCard(foodItem: FoodItem) {
+    Card(
+        shape = RoundedCornerShape(8.dp),
+        elevation = 4.dp,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { /* Handle item click */ }
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Placeholder for the image using a gradient background
+            Box(
+                modifier = Modifier
+                    .size(100.dp)
+                    .background(
+                        brush = Brush.linearGradient(
+                            colors = listOf(Color.Gray, Color.LightGray)
+                        ),
+                        shape = RectangleShape
+                    )
+            )
+
+            Spacer(modifier = Modifier.width(16.dp))
+            Column {
+                Text(text = foodItem.name, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text(text = foodItem.price, fontSize = 14.sp, color = Color.Gray)
+            }
+        }
+    }
+}
+
+// BottomNavigationBar with icons
+@Composable
+fun BottomNavigationBar() {
+    BottomNavigation(backgroundColor = Color.White) {
+        BottomNavigationItem(
+            icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
+            label = { Text("Home") },
+            selected = false,
+            onClick = { /* Handle Home click */ }
+        )
+        BottomNavigationItem(
+            icon = { Icon(Icons.Default.Dashboard, contentDescription = "Dashboard") },
+            label = { Text("Dashboard") },
+            selected = false,
+            onClick = { /* Handle Dashboard click */ }
+        )
+        BottomNavigationItem(
+            icon = { Icon(Icons.Default.Notifications, contentDescription = "Notifications") },
+            label = { Text("Notifications") },
+            selected = false,
+            onClick = { /* Handle Notifications click */ }
+        )
+    }
+}
+@Preview(showBackground = true)
+@Composable
+fun PreviewMenuScreen() {
+    MenuScreen()
+}
+
+
+
+
+

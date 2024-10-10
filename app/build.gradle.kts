@@ -65,6 +65,8 @@ dependencies {
     implementation("androidx.compose.material:material:1.5.1") // Material Design
     implementation("androidx.compose.foundation:foundation:1.5.1") // Foundation library (Layout, LazyColumn, etc.)
     implementation("androidx.compose.material:material-icons-extended:1.5.1")
+    implementation ("com.google.android.material:material:1.9.0") // or latest version
+    implementation ("androidx.compose.material3:material3:1.0.1") // or latest version
 
 
 

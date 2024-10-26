@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Munchies Delivery</string>
+    <string name="home_intro">Hello</string>
+    <string name="home_subHeading">What would you like to eat?</string>
+    <string name="profile_screen">Profile Screen</string>
+    <string name="fav_screen">Favourites Screen</string>
+    <string name="menu_screen_title">Our Menu</string>
+</resources>
